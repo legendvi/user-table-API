@@ -39,5 +39,5 @@ export async function updateTable(rowArray) {
   </tr>`;
   });
 
-  return html;
+  return { html, rowArray };
 }

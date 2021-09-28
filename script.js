@@ -171,7 +171,7 @@ const init = async function () {
     rowArray = data;
   }
 
-  await updateTable(rowArray).then((html) => (tbody.innerHTML = html));
+  await updateTable(rowArray).then((data) => (tbody.innerHTML = data.html));
 };
 init();
 //End of init funtion------------------------------------------------
@@ -179,11 +179,12 @@ init();
 
 //updateNewValues is called when form is submitted
 //this fucntion posts the data to API and the renders the Table with the data
-//this also reloads the page so id gets updated in all objects from API from the api gets
-const updateNewValues = async function (row, rowArray) {
+const updateNewValues = async function (row, data) {
   await apiCall.postData(row);
-  await updateTable(rowArray).then((html) => (tbody.innerHTML = html));
-  location.reload();
+
+  const update = await updateTable(data);
+  tbody.innerHTML = update.html;
+  rowArray = update.rowArray;
 };
 //End of Update funtion--------------------------------------------
 
@@ -205,7 +206,7 @@ async function changeElement(element, checkedFood, rowArray) {
   //putData sends request with PUT method
   await apiCall.putData(element);
   //updateTable updates the table with new value taken from API
-  await updateTable(rowArray).then((html) => (tbody.innerHTML = html));
+  await updateTable(rowArray).then((data) => (tbody.innerHTML = data.html));
 }
 //End of edit funtion------------------------------------------------------------------------
 
@@ -218,7 +219,7 @@ const deleteElement = async function (rowArray, element) {
   await apiCall.deleteData(rowArray[element]);
   rowArray.splice(element, 1);
   // Api Call to Delete element when Delete Button is pressed
-  await updateTable(rowArray).then((html) => (tbody.innerHTML = html));
+  await updateTable(rowArray).then((data) => (tbody.innerHTML = data.html));
 };
 //End of Delete Funtion-------------------------------------
 
