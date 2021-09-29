@@ -7,16 +7,17 @@ import * as apiCall from "./APIcalls.js";
 // this funtion creates html template for the table body using the data returned from API
 //and returns the html code
 export async function updateTable(rowArray) {
-  const data = await apiCall.getData();
-  if (data) {
-    rowArray = data;
-  }
-  let html = "";
+  try {
+    const data = await apiCall.getData();
+    if (data) {
+      rowArray = data;
+    }
+    let html = "";
 
-  rowArray.forEach(function (element) {
-    const curElement = element;
-    curElement.id = element.id;
-    html += `<tr id=${curElement.id}>
+    rowArray.forEach(function (element) {
+      const curElement = element;
+      curElement.id = element.id;
+      html += `<tr id=${curElement.id}>
     <td>${curElement.firstname}</td>
     <td>${curElement.lastname}</td>
     <td>
@@ -37,7 +38,10 @@ export async function updateTable(rowArray) {
       </button>
     </td>
   </tr>`;
-  });
+    });
 
-  return { html, rowArray };
+    return { html, rowArray };
+  } catch (error) {
+    throw error;
+  }
 }

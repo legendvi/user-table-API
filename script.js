@@ -166,12 +166,16 @@ table.addEventListener("click", function (e) {
 //Retriving Data from API-------------------------------------------------------
 //gets data from API when page loads
 const init = async function () {
-  const data = await apiCall.getData();
-  if (data && data.length != 0) {
-    rowArray = data;
-  }
+  try {
+    const data = await apiCall.getData();
+    if (data && data.length != 0) {
+      rowArray = data;
+    }
 
-  await updateTable(rowArray).then((data) => (tbody.innerHTML = data.html));
+    await updateTable(rowArray).then((data) => (tbody.innerHTML = data.html));
+  } catch (error) {
+    alert(`something went Wrong. Please try again`);
+  }
 };
 init();
 //End of init funtion------------------------------------------------
@@ -180,11 +184,15 @@ init();
 //updateNewValues is called when form is submitted
 //this fucntion posts the data to API and the renders the Table with the data
 const updateNewValues = async function (row, data) {
-  await apiCall.postData(row);
+  try {
+    await apiCall.postData(row);
 
-  const update = await updateTable(data);
-  tbody.innerHTML = update.html;
-  rowArray = update.rowArray;
+    const update = await updateTable(data);
+    tbody.innerHTML = update.html;
+    rowArray = update.rowArray;
+  } catch (error) {
+    alert(`Not able to send data to API. Please try again`);
+  }
 };
 //End of Update funtion--------------------------------------------
 
@@ -193,20 +201,24 @@ const updateNewValues = async function (row, data) {
 //This fucntion updates the values of element that has to be updated
 //and calls putData method which updates the data in API
 async function changeElement(element, checkedFood, rowArray) {
-  element.firstname = firstname.value;
-  element.lastname = lastname.value;
-  element.email = email.value;
-  element.address = address.value;
-  element.pincode = pincode.value;
-  element.gender = gender.value;
-  element.checkedFood = checkedFood;
-  element.state = state.value;
-  element.country = country.value;
-  editing = false;
-  //putData sends request with PUT method
-  await apiCall.putData(element);
-  //updateTable updates the table with new value taken from API
-  await updateTable(rowArray).then((data) => (tbody.innerHTML = data.html));
+  try {
+    element.firstname = firstname.value;
+    element.lastname = lastname.value;
+    element.email = email.value;
+    element.address = address.value;
+    element.pincode = pincode.value;
+    element.gender = gender.value;
+    element.checkedFood = checkedFood;
+    element.state = state.value;
+    element.country = country.value;
+    editing = false;
+    //putData sends request with PUT method
+    await apiCall.putData(element);
+    //updateTable updates the table with new value taken from API
+    await updateTable(rowArray).then((data) => (tbody.innerHTML = data.html));
+  } catch (error) {
+    alert(`Something went wrong. Please try again`);
+  }
 }
 //End of edit funtion------------------------------------------------------------------------
 
@@ -216,10 +228,14 @@ async function changeElement(element, checkedFood, rowArray) {
 //Also calls updateTable, updateTable  updates the new result to table after getting it from
 //API using GET method
 const deleteElement = async function (rowArray, element) {
-  await apiCall.deleteData(rowArray[element]);
-  rowArray.splice(element, 1);
-  // Api Call to Delete element when Delete Button is pressed
-  await updateTable(rowArray).then((data) => (tbody.innerHTML = data.html));
+  try {
+    await apiCall.deleteData(rowArray[element]);
+    rowArray.splice(element, 1);
+    // Api Call to Delete element when Delete Button is pressed
+    await updateTable(rowArray).then((data) => (tbody.innerHTML = data.html));
+  } catch (error) {
+    alert(`Something Went Wrong. Please try Again`);
+  }
 };
 //End of Delete Funtion-------------------------------------
 
